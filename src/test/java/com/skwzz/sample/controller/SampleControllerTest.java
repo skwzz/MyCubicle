@@ -12,6 +12,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.util.NestedServletException;
+
+import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,6 +27,7 @@ class SampleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
@@ -46,7 +50,6 @@ class SampleControllerTest {
     public void DTO_검증_필수값누락() throws Exception {
         SampleDto sampleDto = SampleDto.builder()
                 .name("길동")
-                .requiredField("필수데이터")
                 .limitedRangeIntField(100)
                 .unlimitedRangeIntField(1)
                 .build();
