@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/sample")
 public class SampleController {
 
-    private final SampleService service;
+    private final SampleService sampleService;
 
     @GetMapping
     public String getSample(){
@@ -26,5 +26,12 @@ public class SampleController {
         log.info("SAMPLE_DTO TOSTRING()");
         log.info(sampleDto.toString());
         return sampleDto.toString();
+    }
+
+    @PostMapping("/check-dto/service")
+    public String checkDtoInService(@RequestBody SampleDto sampleDto){
+        log.info("SAMPLE_DTO TOSTRING()");
+        log.info(sampleDto.toString());
+        return sampleService.checkDtoInService(sampleDto);
     }
 }
