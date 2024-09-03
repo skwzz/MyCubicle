@@ -18,6 +18,10 @@ spring:
       ddl-auto: none
     show_sql: true
     defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
 logging:
   level:
     root: INFO
+    org.springframework.jdbc.datasource.init.ScriptUtils: DEBUG
