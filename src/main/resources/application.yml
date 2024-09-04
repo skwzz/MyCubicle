@@ -26,3 +26,7 @@ logging:
     root: INFO
     org.springframework.jdbc.datasource.init.ScriptUtils: DEBUG
     org.springframework.security: DEBUG
+
+jwt:
+  secret-key: d+tiN9EN4+gm/6AoTDqZwglMYkC2a5YbtjOsvD7VCqM=
+  validity-in-milliseconds: 30000
