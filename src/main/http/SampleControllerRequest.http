@@ -1,5 +1,5 @@
 ### Test createSample method in SampleController
 ### See: src/main/java/org/skwzz/presentation/SampleController.java
-POST http://localhost:8080/api/sample
+GET http://localhost:8080/api/sample
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0VXNlciIsImlhdCI6MTcyNTQzNTM3OSwiZXhwIjoxNzI1NDM1NDA5fQ.WTelO_gF9eXLIJcUPPnpOvyP3C3pr52WKd8wThDNeE0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0VXNlciIsImlhdCI6MTcyNTUxNDk1OSwiZXhwIjoxNzI1NTE0OTYyfQ.xrhuHwUKIG2K_4td9szrtSW9zj4OOwPXCIOL7DjYIu0

@@ -30,4 +30,4 @@ logging:
 
 jwt:
   secret-key: d+tiN9EN4+gm/6AoTDqZwglMYkC2a5YbtjOsvD7VCqM=
-  validity-in-milliseconds: 30000
+  validity-in-milliseconds: 3000

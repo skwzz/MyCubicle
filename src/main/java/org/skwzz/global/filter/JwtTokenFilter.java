@@ -1,5 +1,6 @@
 package org.skwzz.global.filter;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,33 +28,33 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (isPublicResource(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authorization = request.getHeader("Authorization");
-        String token = null;
-        String username = null;
+        String token = (authorization != null && authorization.startsWith("Bearer ")) ? authorization.substring(7) : null;
 
-        // 토큰이 있고, Bearer로 시작하는지 확인
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            token = authorization.substring(7);
-            username = jwtUtil.getUsernameFromToken(token);
-        }
-
-        // 토큰이 유효하고 SecurityContext에 인증 정보가 없는 경우
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        // 토큰이 유효한지 확인
+        if (jwtUtil.validateToken(token)) {
+            String username = jwtUtil.getUsernameFromToken(token);
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            // 토큰이 유효한지 확인
-            if (jwtUtil.validateToken(token, userDetails.getUsername())) {
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // SecurityContext에 인증 정보 설정
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+            // SecurityContext에 인증 정보 설정
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
 
         // 다음 필터 체인으로 진행
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublicResource(String requestURI) {
+        return requestURI.startsWith("/auth");
     }
 }
 

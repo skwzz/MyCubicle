@@ -3,6 +3,7 @@ package org.skwzz.global.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.skwzz.global.exception.JwtAuthenticationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,27 +35,23 @@ public class JwtUtil {
                 .compact();
     }
 
-    // 2. 토큰 검증
-    /*
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
-            return true;
+    public Boolean validateToken(String token) {
+        try{
+            final String extractedUsername = getUsernameFromToken(token);
+            return !isTokenExpired(token);
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
+            throw new JwtAuthenticationException("Invalid JWT Token");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
+            throw new JwtAuthenticationException("Expired JWT Token");
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
+            throw new JwtAuthenticationException("Unsupported JWT Token");
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
+            throw new JwtAuthenticationException("Unsupported JWT Token");
         }
-        return false;
-    }
-    */
-    public Boolean validateToken(String token, String username) {
-        final String extractedUsername = getUsernameFromToken(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
 
     // 3. 토큰에서 사용자 정보 추출
