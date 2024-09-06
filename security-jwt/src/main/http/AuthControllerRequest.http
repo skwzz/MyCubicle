@@ -1,0 +1,21 @@
+### Test signUp method in AuthController
+### See: src/main/java/org/skwzz/presentation/AuthController.java
+POST http://localhost:8080/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "testUser",
+  "email": "testEmail@example.com",
+  "password": "testPassword"
+}
+
+### Test signIn method in AuthController
+### See: src/main/java/org/skwzz/presentation/AuthController.java
+POST http://localhost:8080/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "testUser",
+  "email": "testEmail@example.com",
+  "password": "testPassword"
+}
