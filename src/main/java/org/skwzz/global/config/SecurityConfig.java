@@ -22,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
-    //private final JwtExceptionFilter jwtExceptionFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
 
@@ -38,7 +37,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                //.addFilterBefore(jwtExceptionFilter, JwtTokenFilter.class)
                 .exceptionHandling(ex->ex.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(accessDeniedHandler));
         return http.build();
     }

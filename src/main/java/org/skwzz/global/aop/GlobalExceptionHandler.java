@@ -9,12 +9,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<String> handleExpiredJwtException(ExpiredJwtException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ex.getMessage());
-    }
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
