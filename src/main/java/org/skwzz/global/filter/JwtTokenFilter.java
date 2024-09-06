@@ -35,31 +35,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
         String token = (authorization != null && authorization.startsWith("Bearer ")) ? authorization.substring(7) : null;
 
-        try{
-            if (jwtUtil.validateToken(token)) {
-                String username = jwtUtil.getUsernameFromToken(token);
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        if (jwtUtil.validateToken(token)) {
+            String username = jwtUtil.getUsernameFromToken(token);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // SecurityContext에 인증 정보 설정
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-            throw new JwtAuthenticationException("Invalid JWT Token");
-        } catch (
-        ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-            throw new JwtAuthenticationException("Expired JWT Token");
-        } catch (
-        UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-            throw new JwtAuthenticationException("Unsupported JWT Token");
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-            throw new JwtAuthenticationException("Unsupported JWT Token");
+            // SecurityContext에 인증 정보 설정
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
 
         // 다음 필터 체인으로 진행
         filterChain.doFilter(request, response);
