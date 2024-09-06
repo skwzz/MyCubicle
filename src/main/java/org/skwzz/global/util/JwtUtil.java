@@ -36,22 +36,25 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token) {
-        try{
-            final String extractedUsername = getUsernameFromToken(token);
-            return !isTokenExpired(token);
+//        final String extractedUsername = getUsernameFromToken(token);
+//        return !isTokenExpired(token);
+        try {
+            Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
+            return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-            throw new JwtAuthenticationException("Invalid JWT Token");
+            log.info("Invalid JWT signature.");
+            log.trace("Invalid JWT signature trace: {}", e);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-            throw new JwtAuthenticationException("Expired JWT Token");
+            log.info("Expired JWT token.");
+            log.trace("Expired JWT token trace: {}", e);
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-            throw new JwtAuthenticationException("Unsupported JWT Token");
+            log.info("Unsupported JWT token.");
+            log.trace("Unsupported JWT token trace: {}", e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-            throw new JwtAuthenticationException("Unsupported JWT Token");
+            log.info("JWT token compact of handler are invalid.");
+            log.trace("JWT token compact of handler are invalid trace: {}", e);
         }
+        return false;
     }
 
     // 3. 토큰에서 사용자 정보 추출
@@ -83,6 +86,7 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+
     }
 
     private Date getExpirationDateFromToken(String token) {
