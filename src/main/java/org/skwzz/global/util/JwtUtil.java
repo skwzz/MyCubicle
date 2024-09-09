@@ -26,9 +26,10 @@ public class JwtUtil {
     }
 
     // 1. 토큰 생성
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -67,11 +68,12 @@ public class JwtUtil {
     }
 
     // 5. 토큰 갱신 (선택 사항)
+    /*
     public String refreshToken(String token) {
         final Claims claims = getAllClaimsFromToken(token);
         return generateToken(claims.getSubject());
     }
-
+    */
     // Helper methods
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);

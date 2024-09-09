@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.skwzz.global.enums.MemberRole;
 
 @Table(name = "SMember")
 @Getter
@@ -21,4 +22,6 @@ public class Member {
     private String username;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
 }
