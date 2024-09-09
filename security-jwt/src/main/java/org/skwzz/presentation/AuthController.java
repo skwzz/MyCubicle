@@ -3,6 +3,7 @@ package org.skwzz.presentation;
 import lombok.RequiredArgsConstructor;
 import org.skwzz.domain.member.service.AuthService;
 import org.skwzz.domain.member.service.MemberService;
+import org.skwzz.payload.request.StaffSignUpRequestDTO;
 import org.skwzz.payload.request.SignInRequestDTO;
 import org.skwzz.payload.request.SignUpRequestDTO;
 import org.skwzz.payload.response.SignInResponseDTO;
@@ -28,5 +29,10 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO request){
         return ResponseEntity.ok().body(authService.signIn(request));
+    }
+
+    @PostMapping("/staff/sign-up")
+    public ResponseEntity<Boolean> staffSignUp(@RequestBody StaffSignUpRequestDTO request){
+        return ResponseEntity.ok().body(memberService.signUp(request));
     }
 }

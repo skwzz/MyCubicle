@@ -27,10 +27,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String[] adminRoles = {"ADMIN"};
+        String[] managerRoles = {"ADMIN", "MANAGER"};
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasAnyRole(adminRoles)
+                        .requestMatchers("/manager/**").hasAnyRole(managerRoles)
+                        .requestMatchers("/api/open/**").permitAll()
+                        .requestMatchers("/api/close/**").authenticated()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()

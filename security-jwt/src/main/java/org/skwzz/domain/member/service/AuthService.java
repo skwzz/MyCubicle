@@ -9,6 +9,7 @@ import org.skwzz.payload.response.SignInResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +30,9 @@ public class AuthService{
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtUtil.generateToken(request.getUsername());
+        String role = authentication.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority).orElseThrow(() -> new RuntimeException("권한정보가 없습니다."));
+        String token = jwtUtil.generateToken(request.getUsername(), role);
         log.info("GENERATED TOKEN: {}", token);
-        SignInResponseDTO response = new SignInResponseDTO(token);
-        return response;
+        return new SignInResponseDTO(token);
     }
 }

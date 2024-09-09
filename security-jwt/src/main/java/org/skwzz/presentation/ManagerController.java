@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/sample")
-public class SampleController {
+@RequestMapping("/manager")
+@RestController
+public class ManagerController {
 
     @GetMapping
-    public String getSampleString(){
-        return "THIS IS SAMPLE";
+    public String getString(){
+        return "THIS IS '/manager' API";
     }
 }

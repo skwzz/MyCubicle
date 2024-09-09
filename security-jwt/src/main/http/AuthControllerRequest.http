@@ -19,3 +19,28 @@ Content-Type: application/json
   "email": "testEmail@example.com",
   "password": "testPassword"
 }
+
+### Test staffSignUp method in AuthController
+### See: src/main/java/org/skwzz/presentation/AuthController.java
+POST http://localhost:8080/auth/staff/sign-up
+Content-Type: application/json
+
+{
+  "username": "staffUser",
+  "email": "staffEmail@example.com",
+  "password": "staffPassword",
+  "role": "ROLE_MANAGER"
+}
+
+### Test signIn method in AuthController
+### See: src/main/java/org/skwzz/presentation/AuthController.java
+POST http://localhost:8080/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "staffUser",
+  "email": "staffEmail@example.com",
+  "password": "staffPassword"
+}
+
+
