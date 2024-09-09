@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.skwzz.domain.member.entity.Member;
 import org.skwzz.domain.member.repository.MemberRepository;
 import org.skwzz.payload.request.SignUpRequestDTO;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -20,6 +21,9 @@ class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private MemberService memberService;
