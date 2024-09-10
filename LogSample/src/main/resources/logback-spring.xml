@@ -1,0 +1,75 @@
+<configuration>
+    <!-- Spring Profile 설정 -->
+    <springProperty scope="context" name="springProfile" source="spring.profiles.active" />
+
+    <!-- 콘솔에 로그를 출력하는 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 일반 로그 파일에 로그를 기록하는 설정 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app-${springProfile}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1KB</maxFileSize> <!-- 작은 크기로 설정하여 파일 자동 생성 확인 가능 -->
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory> <!-- 최대 30일간 로그 파일 보관 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 에러 로그 전용 파일에 로그를 기록하는 설정 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/error/error-${springProfile}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/error/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1KB</maxFileSize> <!-- 작은 크기로 설정하여 파일 자동 생성 확인 가능 -->
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory> <!-- 최대 30일간 로그 파일 보관 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!-- 에러 로그만 기록하는 필터 설정 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 특정 패키지 로그를 별도의 파일로 기록하는 설정 -->
+    <appender name="SPECIAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/special/special-${springProfile}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/special/special-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 특정 패키지의 로그 설정 -->
+    <logger name="org.skwzz.special" level="INFO" additivity="true">
+        <appender-ref ref="SPECIAL_FILE" />
+    </logger>
+
+
+    <!-- Root Logger 설정 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+</configuration>
